@@ -1,0 +1,14 @@
+{
+  "background_color": "#ffffff",
+  "dir": "rtl",
+  "display": "standalone",
+  "name": "Fateh DiagTech",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Fateh DiagTech",
+  "start_url": "/",
+  "theme_color": "#101827",
+  "id": "https://becheikh133.github.io/Fateh-B-Diag-Tech./",
+  "description": "Application de la gestion des données et de la documentation électriques automobiles",
+  "lang": "en"
+}
