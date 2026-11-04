@@ -4,7 +4,7 @@
   "display": "standalone",
   "name": "Fateh DiagTech",
   "orientation": "any",
-  "scope": "Fateh-B-Diag-Tech/",
+  "scope": "/Fateh-B-Diag-Tech/",
   "short_name": "Fateh DiagTech",
   "start_url": "/Fateh-B-Diag-Tech/",
   "theme_color": "#101827",
