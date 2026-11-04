@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+<meta name="theme-color" content="#101827">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fateh DiagTech">
+<title>Fateh-B Diag-Tech Pro</title>
+
+<!-- توليد PWA Manifest تلقائياً -->
+<script>
+(function setupPWA() {
+  const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="90" fill="#101827"/>
+    <rect x="24" y="24" width="464" height="464" rx="70" fill="#17283e" stroke="#42c8ff" stroke-width="16"/>
+    <path d="M280 96L144 280h112l-24 136 136-184H256l24-136z" fill="#42c8ff"/>
+  </svg>`;
+  const iconUrl = "data:image/svg+xml;base64," + btoa(svgIcon);
+
+  const linkIcon = document.createElement("link");
+  linkIcon.rel = "icon";
+  linkIcon.href = iconUrl;
+  document.head.appendChild(linkIcon);
+
+  const manifest = {
+    name: "Fateh-B Diag-Tech Pro",
+    short_name: "Fateh Diag",
+    start_url: "./index.html",
+    display: "standalone",
+    background_color: "#101827",
+    theme_color: "#17283e",
+    icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }]
+  };
+  const manifestBlob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+  const manifestLink = document.createElement("link");
+  manifestLink.rel = "manifest";
+  manifestLink.href = URL.createObjectURL(manifestBlob);
+  document.head.appendChild(manifestLink);
+})();
+</script>
+
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; background: #101827; color: #f0f6fc; font-family: system-ui, -apple-system, Arial, sans-serif; line-height: 1.5; }
+  
+  header { background: linear-gradient(135deg, #17283e, #0f1c2e); text-align: center; padding: 18px 15px; border-bottom: 3px solid #16a5df; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.45); }
+  header h1 { color: #42c8ff; margin: 0; font-size: clamp(20px, 4.5vw, 28px); letter-spacing: 0.5px; }
+  header p { color: #b9c8d8; margin: 4px 0 0; font-size: 13px; }
+
+  /* شريط تبديل اللغة العلوي */
+  .lang-bar { display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding: 8px 15px; background: #132235; border-bottom: 1px solid #283d59; }
+  .lang-btn { background: #1c2b40; color: #b9c8d8; border: 1px solid #3c587d; padding: 6px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: bold; }
+  .lang-btn.active { background: #078bc5; color: #ffffff; border-color: #42c8ff; }
+
+  .container { max-width: 1220px; margin: 15px auto; padding: 10px; }
+  .panel { background: #1c2b40; padding: 18px; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.35); border: 1px solid #2b3f5c; }
+  .sub-panel { background: #142030; padding: 15px; border-radius: 10px; border: 1px solid #283d59; margin-bottom: 14px; }
+  h2 { color: #42c8ff; margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  h3 { color: #b9dfff; font-size: 15px; margin: 0 0 10px 0; }
+  label { display: block; margin-top: 8px; color: #dce8f5; font-size: 13px; font-weight: 600; }
+
+  input, select, textarea { width: 100%; padding: 11px 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #52647b; background: #ffffff; color: #101827; font-size: 15px; font-family: inherit; }
+  textarea { min-height: 75px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid #42c8ff; }
+
+  button { padding: 12px 15px; border: 0; border-radius: 8px; background: #078bc5; color: white; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  button:hover { background: #0874a4; }
+  button:active { transform: scale(0.98); }
+  .full { width: 100%; margin-top: 10px; }
+  .admin { background: #263b56; border: 1px solid #3c587d; }
+  .admin:hover { background: #324d70; }
+  .danger { background: #c0392b; }
+  .danger:hover { background: #a53125; }
+  .success { background: #16875a; }
+  .success:hover { background: #126e49; }
+  .warning { background: #d68910; }
+  .warning:hover { background: #b9770e; }
+  .icon-btn { font-size: 16px; min-width: 42px; min-height: 42px; padding: 8px 11px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px; }
+  .flex-row { display: flex; gap: 8px; align-items: center; }
+
+  .folder-bar { background: #13253a; border: 1px dashed #42c8ff; padding: 14px; border-radius: 10px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #f39c12; margin-right: 6px; }
+  .status-dot.active { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+
+  .document { background: #22354e; padding: 16px; border-radius: 10px; margin: 12px 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap; border-left: 4px solid #42c8ff; }
+  [dir="rtl"] .document { border-left: none; border-right: 4px solid #42c8ff; }
+
+  .document-info { flex: 1; min-width: 240px; }
+  .document-info strong { font-size: 17px; color: #ffffff; display: block; margin-bottom: 6px; }
+  .badge { display: inline-block; background: #101827; color: #42c8ff; padding: 3px 9px; border-radius: 6px; font-size: 12px; margin-left: 5px; margin-right: 5px; margin-top: 4px; border: 1px solid #2b4566; font-weight: 600; }
+  .badge-type { background: #16875a; color: #fff; border-color: #1abc9c; }
+  .badge-ecu { background: #2c3e50; color: #f1c40f; border-color: #f39c12; }
+  .badge-dtc { background: #4a1c1c; color: #ff8a8a; border-color: #c0392b; }
+  .tech-notes { background: #152233; border-inline-start: 3px solid #f39c12; padding: 8px 12px; border-radius: 6px; margin-top: 8px; font-size: 13px; color: #e2eefc; white-space: pre-wrap; }
+  .small { font-size: 13px; color: #b8c6d7; margin: 4px 0; }
+  .hidden { display: none !important; }
+  .actions { display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+  hr { border: 0; border-top: 1px solid #394d67; margin: 20px 0; }
+  footer { text-align: center; color: #899bad; padding: 25px; font-size: 13px; }
+
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; display: flex; flex-direction: column; padding: 10px; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; background: #17283e; padding: 12px 16px; border-radius: 8px 8px 0 0; border-bottom: 2px solid #16a5df; flex-wrap: wrap; gap: 8px; }
+  .modal-body { flex: 1; background: #0b111b; display: flex; align-items: center; justify-content: center; overflow: auto; border-radius: 0 0 8px 8px; padding: 10px; }
+  .modal-body iframe, .modal-body img, .modal-body video { max-width: 100%; max-height: 100%; border: 0; border-radius: 6px; }
+  .modal-body iframe { width: 100%; height: 100%; background: white; }
+</style>
+</head>
+
+<body>
+
+<!-- شريط اختيار اللغة -->
+<div class="lang-bar">
+  <span style="font-size:12px; color:#b9c8d8;" data-i18n="langLabel">Language / Langue / اللغة:</span>
+  <button class="lang-btn" id="btn-ar" onclick="setLanguage('ar')">العربية 🇩🇿</button>
+  <button class="lang-btn" id="btn-fr" onclick="setLanguage('fr')">Français 🇫🇷</button>
+  <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">English 🇬🇧</button>
+</div>
+
+<datalist id="makesData">
+  <option value="Renault"><option value="Peugeot"><option value="Citroen"><option value="Volkswagen">
+  <option value="Audi"><option value="Seat"><option value="Skoda"><option value="Dacia">
+  <option value="Hyundai"><option value="Kia"><option value="Toyota"><option value="Fiat">
+  <option value="Ford"><option value="Opel"><option value="Mercedes-Benz"><option value="BMW">
+  <option value="Chevrolet"><option value="Nissan"><option value="Mitsubishi"><option value="Suzuki">
+  <option value="Chery"><option value="Geely"><option value="DFSK"><option value="Great Wall">
+</datalist>
+
+<datalist id="ecuBrandsData">
+  <option value="Bosch EDC15"><option value="Bosch EDC16"><option value="Bosch EDC17"><option value="Bosch MD1/MG1">
+  <option value="Bosch ME7"><option value="Bosch MSA 15.5"><option value="Siemens / Continental SID">
+  <option value="Siemens Sirius 32 / 34"><option value="Delphi DCM 1.2 / 3.4 / 3.5"><option value="Valeo V40 / V42 / J34P">
+  <option value="Magneti Marelli IAW / MJD"><option value="Sagem S2000 / S3000"><option value="Denso"><option value="Delco / Kefico">
+</datalist>
+
+<header>
+  <h1 data-i18n="appTitle">⚡ Fateh-B Diag-Tech Pro</h1>
+  <p data-i18n="appSubtitle">AUTOMOTIVE ELECTRICAL, ECU, WIRING & DIAGNOSTIC SYSTEM</p>
+</header>
+
+<div class="container">
+
+  <!-- شريط ربط المجلد الذكي -->
+  <div class="folder-bar">
+    <div>
+      <strong><span id="folderDot" class="status-dot"></span><span data-i18n="folderTitle">Local Media Folder (files/)</span></strong>
+      <p id="folderStatus" class="small" data-i18n="folderDesc">Windows: Reads "files/" automatically. Mobile: Tap "Link Folder" or "Select Files" once to enable offline Video/PDF playback.</p>
+    </div>
+    <div class="actions">
+      <input type="file" id="folderPicker" webkitdirectory directory multiple class="hidden" onchange="handleFolderLink(event)">
+      <input type="file" id="multiFilePicker" multiple class="hidden" onchange="handleFolderLink(event)">
+      <button class="success" onclick="document.getElementById('folderPicker').click()" data-i18n="btnLinkFolder">📂 Link Folder</button>
+      <button class="admin" onclick="document.getElementById('multiFilePicker').click()" data-i18n="btnSelectFiles">📱 Select Files</button>
+    </div>
+  </div>
+
+  <!-- قسم البحث -->
+  <section class="panel">
+    <h2 data-i18n="searchHeader">🔍 Vehicle & Technical Documentation Search</h2>
+
+    <div class="grid-4">
+      <div>
+        <label data-i18n="lblMake">Make / Marque</label>
+        <select id="make"><option value="" data-i18n="optAllMakes">All Makes</option></select>
+      </div>
+      <div>
+        <label data-i18n="lblModel">Model / Modèle</label>
+        <select id="model"><option value="" data-i18n="optAllModels">All Models</option></select>
+      </div>
+      <div>
+        <label data-i18n="lblYear">Year / Année</label>
+        <select id="year"><option value="" data-i18n="optAllYears">All Years</option></select>
+      </div>
+      <div>
+        <label data-i18n="lblFuel">Fuel / Carburant</label>
+        <select id="searchFuel" onchange="searchDocuments()">
+          <option value="" data-i18n="optAllFuels">All Fuels</option>
+          <option>Diesel</option>
+          <option>Petrol / Essence</option>
+          <option>Hybrid</option>
+          <option>GPL / LPG</option>
+          <option>Electric</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <label data-i18n="lblSystem">System / Module</label>
+        <select id="searchSystem" onchange="searchDocuments()">
+          <option value="" data-i18n="optAllSystems">All Systems</option>
+          <option>Engine ECU (Injection)</option>
+          <option>BSI / UCH / BCM (Body)</option>
+          <option>IMMO / Keys / Code</option>
+          <option>Fuse Box / Relays / BSM</option>
+          <option>ABS / ESP / Brakes</option>
+          <option>Airbag / SRS</option>
+          <option>Dashboard / Instrument Cluster</option>
+          <option>Automatic Gearbox (TCU)</option>
+          <option>A/C & Cooling Fan</option>
+          <option>Charging & Starting</option>
+          <option>CAN / LIN Network</option>
+          <option>Other System</option>
+        </select>
+      </div>
+      <div>
+        <label data-i18n="lblCategory">Document Category</label>
+        <select id="category" onchange="searchDocuments()">
+          <option value="" data-i18n="optAllCategories">All Categories</option>
+          <option>Wiring Diagram</option>
+          <option>ECU Pinout / Boot</option>
+          <option>ECU Repair / Components</option>
+          <option>Sensor / Actuator Test Values</option>
+          <option>IMMO Off / Virgin / Pin</option>
+          <option>Fuse & Relay Location</option>
+          <option>DTC Fault Solution</option>
+          <option>Video Tutorial</option>
+          <option>Service Manual / Other</option>
+        </select>
+      </div>
+      <div>
+        <label data-i18n="lblKeyword">Smart Search (Engine, ECU, DTC, Title)</label>
+        <input id="keyword" placeholder="e.g. F9Q, K9K, EDC15, P0190..." oninput="searchDocuments()">
+      </div>
+    </div>
+
+    <div class="grid">
+      <button class="full" onclick="searchDocuments()" data-i18n="btnSearch">🔍 SEARCH DATABASE</button>
+      <button class="full admin" onclick="showAll()"><span data-i18n="btnShowAll">📂 RESET & SHOW ALL</span> (<span id="totalDocsBtn">0</span>)</button>
+    </div>
+  </section>
+
+  <!-- النتائج -->
+  <section class="panel">
+    <h2 data-i18n="resultsHeader">📄 Matching Technical Records</h2>
+    <div id="results" class="small" data-i18n="resultsPlaceholder">Select search filters or click "Show All".</div>
+  </section>
+
+  <!-- قسم الإدارة -->
+  <section class="panel">
+    <h2 data-i18n="adminHeader">🔒 Workshop Administration & Data Entry</h2>
+    <p class="small" data-i18n="adminDesc">Add vehicles, technical specifications, DTC codes, and manage database.</p>
+
+    <div id="loginBox">
+      <label data-i18n="lblAdminPass">Administrator Password</label>
+      <div class="flex-row">
+        <input type="password" id="loginPassword" placeholder="Enter Password (Default: Amineb2014)" onkeydown="if(event.key==='Enter')login()">
+        <button type="button" class="admin icon-btn" onclick="togglePass('loginPassword')">👁️</button>
+      </div>
+      <div class="grid">
+        <button class="full admin" onclick="login()" data-i18n="btnLogin">🔑 ADMIN LOGIN</button>
+        <button class="full warning" onclick="resetDefaultPassword()" data-i18n="btnResetPass">🔄 Reset Default Password</button>
+      </div>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+
+      <div class="sub-panel">
+        <h2 data-i18n="addRecHeader">➕ Add New Technical Document / Vehicle Record</h2>
+        <p class="small" data-i18n="addRecDesc">Select an existing item or type a new one directly.</p>
+
+        <h3 data-i18n="sec1Title">1️⃣ Vehicle Identification (المركبة)</h3>
+        <div class="grid-4">
+          <div>
+            <label data-i18n="lblMake">Make / Marque *</label>
+            <select id="docMake" onchange="onAdminMakeChange()"></select>
+            <input id="docMakeCustom" list="makesData" data-i18n-ph="phNewMake" placeholder="Or type new Make">
+          </div>
+          <div>
+            <label data-i18n="lblModel">Model / Modèle *</label>
+            <select id="docModel" onchange="onAdminModelChange()"></select>
+            <input id="docModelCustom" data-i18n-ph="phNewModel" placeholder="Or type new Model">
+          </div>
+          <div>
+            <label data-i18n="lblYear">Year / Année *</label>
+            <select id="docYear"></select>
+            <input id="docYearCustom" data-i18n-ph="phNewYear" placeholder="Or type Year">
+          </div>
+          <div>
+            <label data-i18n="lblFuel">Fuel Type / الوقود</label>
+            <select id="docFuel">
+              <option>Diesel</option>
+              <option>Petrol / Essence</option>
+              <option>Hybrid</option>
+              <option>GPL / LPG</option>
+              <option>Electric</option>
+            </select>
+          </div>
+        </div>
+
+        <h3 style="margin-top:14px;" data-i18n="sec2Title">2️⃣ Engine, ECU & Electrical System</h3>
+        <div class="grid-4">
+          <div>
+            <label data-i18n="lblEngineCode">Engine Code & Size</label>
+            <input id="engine" placeholder="e.g. 1.5 dCi K9K">
+          </div>
+          <div>
+            <label data-i18n="lblEcuNum">ECU Brand / Number</label>
+            <input id="ecuType" list="ecuBrandsData" placeholder="e.g. Bosch EDC16">
+          </div>
+          <div>
+            <label data-i18n="lblSystem">System / Module</label>
+            <select id="docSystem">
+              <option>Engine ECU (Injection)</option>
+              <option>BSI / UCH / BCM (Body)</option>
+              <option>IMMO / Keys / Code</option>
+              <option>Fuse Box / Relays / BSM</option>
+              <option>ABS / ESP / Brakes</option>
+              <option>Airbag / SRS</option>
+              <option>Dashboard / Instrument Cluster</option>
+              <option>Automatic Gearbox (TCU)</option>
+              <option>A/C & Cooling Fan</option>
+              <option>Charging & Starting</option>
+              <option>CAN / LIN Network</option>
+              <option>Other System</option>
+            </select>
+          </div>
+          <div>
+            <label data-i18n="lblCategory">Document Category</label>
+            <select id="newCategory">
+              <option>Wiring Diagram</option>
+              <option>ECU Pinout / Boot</option>
+              <option>ECU Repair / Components</option>
+              <option>Sensor / Actuator Test Values</option>
+              <option>IMMO Off / Virgin / Pin</option>
+              <option>Fuse & Relay Location</option>
+              <option>DTC Fault Solution</option>
+              <option>Video Tutorial</option>
+              <option>Service Manual / Other</option>
+            </select>
+          </div>
+        </div>
+
+        <h3 style="margin-top:14px;" data-i18n="sec3Title">3️⃣ Details, DTC & Files</h3>
+        <div class="grid">
+          <div>
+            <label data-i18n="lblDocTitle">Document Title</label>
+            <input id="title" data-i18n-ph="phDocTitle" placeholder="Optional title">
+          </div>
+          <div>
+            <label data-i18n="lblDtcCodes">Related DTC Fault Codes</label>
+            <input id="dtcCodes" placeholder="e.g. P0190, DF053">
+          </div>
+        </div>
+
+        <label data-i18n="lblTechNotes">Technical Notes / Sensor Values / Repair Tip</label>
+        <textarea id="techNotes" data-i18n-ph="phTechNotes" placeholder="Example: Resistance = 240 Ohm..."></textarea>
+
+        <label data-i18n="lblSelectFile">Select Files (PDF / Word / Image / Video)</label>
+        <input type="file" id="file" multiple>
+
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin-top:8px;">
+          <input type="checkbox" id="storeBlobCheck" checked style="width:18px; height:18px; margin:0;">
+          <span data-i18n="lblCacheCheck">Cache files under 25 MB inside browser storage</span>
+        </label>
+
+        <button class="full success" style="font-size:16px; padding:14px;" onclick="addDocumentsBatch()" data-i18n="btnSaveRecord">💾 SAVE RECORD</button>
+      </div>
+
+      <div class="sub-panel">
+        <h2 data-i18n="catalogHeader">🚗 Standalone Vehicle Catalog Manager</h2>
+        <div class="grid">
+          <div>
+            <h3 data-i18n="quickAddHeader">＋ Quick Add Vehicle Tree</h3>
+            <input id="quickMake" list="makesData" data-i18n-ph="phMake" placeholder="Make">
+            <input id="quickModel" data-i18n-ph="phModel" placeholder="Model">
+            <input id="quickYear" data-i18n-ph="phYear" placeholder="Year">
+            <button class="full admin" onclick="quickAddVehicleTree()" data-i18n="btnAddVehicle">＋ Add Vehicle</button>
+          </div>
+          <div>
+            <h3 data-i18n="delVehicleHeader">🗑️ Delete Vehicle Entry</h3>
+            <label data-i18n="lblSelectDel">Select Make / Model / Year to remove</label>
+            <select id="deleteVehicleSelect"></select>
+            <button class="full danger" onclick="deleteVehicleEntry()" data-i18n="btnDelVehicle">🗑️ Delete Selected</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-panel">
+        <h2 data-i18n="syncHeader">💾 Database Sync (database.json)</h2>
+        <div class="grid">
+          <button class="full success" onclick="exportDatabase(false)" data-i18n="btnSaveJson">⚡ SAVE database.json</button>
+          <button class="full admin" onclick="exportDatabase(true)" data-i18n="btnExportFull">📦 EXPORT FULL BACKUP</button>
+          <div>
+            <input type="file" id="importFile" accept=".json" class="hidden" onchange="importDatabase(event)">
+            <button class="full warning" onclick="document.getElementById('importFile').click()" data-i18n="btnLoadJson">📥 LOAD database.json</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-panel">
+        <h2>🗑️ <span data-i18n="manageHeader">Manage Existing Records</span> (<span id="manageCount">0</span>)</h2>
+        <div class="flex-row" style="margin-bottom:10px;">
+          <input id="manageFilter" data-i18n-ph="phFilter" placeholder="Filter management list..." oninput="loadManage()">
+          <button class="danger" onclick="clearAllDocuments()" style="white-space:nowrap;" data-i18n="btnClearAll">⚠️ Clear All</button>
+        </div>
+        <div id="manage"></div>
+      </div>
+
+      <div class="sub-panel">
+        <h2 data-i18n="passHeader">🔐 Change Administrator Password</h2>
+        <div class="grid">
+          <input type="password" id="oldPassword" data-i18n-ph="phOldPass" placeholder="Current Password">
+          <input type="password" id="newPassword" data-i18n-ph="phNewPass" placeholder="New Password (min 4 chars)">
+        </div>
+        <button class="full admin" onclick="changePassword()" data-i18n="btnUpdatePass">💾 UPDATE PASSWORD</button>
+        <button class="full danger" onclick="logout()" data-i18n="btnLogout">🚪 LOGOUT ADMIN</button>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<div id="viewerModal" class="modal hidden">
+  <div class="modal-header">
+    <strong id="viewerTitle">Document Preview</strong>
+    <div class="actions">
+      <button id="viewerNewTab" class="admin" data-i18n="btnOpenExt">↗️ Open Externally</button>
+      <button id="viewerDownload" class="success" data-i18n="btnDownload">⬇️ Download</button>
+      <button class="danger" onclick="closeViewer()" data-i18n="btnClose">✖ Close</button>
+    </div>
+  </div>
+  <div id="viewerBody" class="modal-body"></div>
+</div>
+
+<footer>
+  Fateh-B Diag-Tech Pro © 2026 — Workshop Automotive Diagnostic Database
+</footer>
+
+<script>
+// قاموس الترجمات الكامل (عربي، فرنسي، إنجليزي)
+const i18n = {
+  ar: {
+    langLabel: "اللغة:",
+    appTitle: "⚡ فتح-بي ديآغ-تيك برو",
+    appSubtitle: "نظام تشخيص وكهرباء السيارات وخرائط عقول المحركات",
+    folderTitle: "مجلد الملفات المحلي (files/)",
+    folderDesc: "ويندوز: يقرأ مجلد files/ تلقائياً. الهاتف: اضغط 'ربط المجلد' أو 'اختر ملفات' مرة واحدة لتشغيل الفيديوهات و الـ PDF.",
+    btnLinkFolder: "📂 ربط مجلد files/",
+    btnSelectFiles: "📱 اختيار ملفات (الهاتف)",
+    searchHeader: "🔍 البحث في توثيق المركبات والملفات التقنية",
+    lblMake: "العلامة / الشركة",
+    lblModel: "الموديل",
+    lblYear: "سنة الصنع",
+    lblFuel: "نوع الوقود",
+    lblSystem: "النظام / وحدة التحكم",
+    lblCategory: "تصنيف الوثيقة",
+    lblKeyword: "بحث ذكي (محرك، عقل، DTC، عنوان)",
+    btnSearch: "🔍 ابحث في القاعدة",
+    btnShowAll: "📂 إلغاء الفلتر وعرض الكل",
+    resultsHeader: "📄 السجلات التقنية المطابقة",
+    resultsPlaceholder: "اختر خيارات البحث في الأعلى أو اضغط عرض الكل.",
+    adminHeader: "🔒 إدارة الورشة وإدخال البيانات",
+    adminDesc: "إضافة سيارات، مواصفات فنية، أكواد أعطال، ورفع الملفات.",
+    lblAdminPass: "كلمة مرور المسؤول (Admin)",
+    btnLogin: "🔑 تسجيل دخول المسؤول",
+    btnResetPass: "🔄 استعادة كلمة المرور الافتراضية",
+    addRecHeader: "➕ إضافة وثيقة تقنية أو سيارة جديدة",
+    addRecDesc: "اختر من القوائم أو اكتب اسماً جديداً وسيحفظه البرنامج تلقائياً.",
+    sec1Title: "1️⃣ بيانات المركبة الأساسية",
+    sec2Title: "2️⃣ المحرك والنظام الكهربائي",
+    sec3Title: "3️⃣ تفاصيل الوثيقة وأكواد الأعطال",
+    lblEngineCode: "رمز وسعة المحرك",
+    lblEcuNum: "نوع ورقم العقل (ECU)",
+    lblDocTitle: "عنوان الوثيقة (اتركه فارغاً للتسمية التلقائية)",
+    lblDtcCodes: "أكواد الأعطال المرتبطة (DTC)",
+    lblTechNotes: "ملاحظات الفحص، المقاومة، الفولتية أو طريقة الاصلاح",
+    lblSelectFile: "اختيار ملف (PDF / وورد / فيديو / صورة)",
+    lblCacheCheck: "حفظ نسخة مؤقتة للملفات أقل من 25 ميجابايت داخل المتصفح",
+    btnSaveRecord: "💾 حفظ السجل والملفات في القاعدة",
+    catalogHeader: "🚗 إدارة كتالوج السيارات المستقل",
+    quickAddHeader: "＋ إضافة سريعة لشجرة السيارات",
+    delVehicleHeader: "🗑️ حذف سيارة من القوائم",
+    lblSelectDel: "اختر العنصر المراد حذفه من القوائم",
+    btnDelVehicle: "🗑️ حذف العنصر المختار",
+    syncHeader: "💾 مزامنة قاعدة البيانات (database.json)",
+    btnSaveJson: "⚡ حفظ ملف database.json",
+    btnExportFull: "📦 تصدير نسخة احتياطية كاملة",
+    btnLoadJson: "📥 تحميل ملف database.json",
+    manageHeader: "إدارة السجلات المسجلة",
+    btnClearAll: "⚠️ حذف الكل",
+    passHeader: "🔐 تغيير كلمة مرور المسؤول",
+    btnUpdatePass: "💾 تحديث كلمة المرور",
+    btnLogout: "🚪 تسجيل خروج المسؤول",
+    btnOpenExt: "↗️ فتح خارجي",
+    btnDownload: "⬇️ تحميل الملف",
+    btnClose: "✖ إغلاق",
+    optAllMakes: "جميع العلامات",
+    optAllModels: "جميع الموديلات",
+    optAllYears: "جميع السنوات",
+    optAllFuels: "جميع أنواع الوقود",
+    optAllSystems: "جميع الأنظمة",
+    optAllCategories: "جميع التصنيفات",
+    phNewMake: "أو اكتب علامة جديدة (مثل Renault)",
+    phNewModel: "أو اكتب موديل جديد (مثل Clio 3)",
+    phNewYear: "أو اكتب السنة (مثل 2008)",
+    phDocTitle: "مثال: مخطط حقن الوقود وتوصيلات الحساسات",
+    phTechNotes: "مثال: مقاومة حساس الكرنك السليم بين 220 و 280 أوم...",
+    phMake: "العلامة",
+    phModel: "الموديل",
+    phYear: "السنة",
+    phFilter: "بحث في قائمة الإدارة...",
+    phOldPass: "كلمة المرور الحالية",
+    phNewPass: "كلمة المرور الجديدة (4 أحرف فأكثر)",
+    btnAddVehicle: "＋ إضافة السيارة للقوائم"
+  },
+  fr: {
+    langLabel: "Langue:",
+    appTitle: "⚡ Fateh-B Diag-Tech Pro",
+    appSubtitle: "Système de Diagnostic, Électricité Auto & Cartographie ECU",
+    folderTitle: "Dossier Local (files/)",
+    folderDesc: "Windows: Lit 'files/' auto. Mobile: Touchez 'Lier le dossier' ou 'Sélectionner des fichiers' une fois.",
+    btnLinkFolder: "📂 Lier le dossier",
+    btnSelectFiles: "📱 Fichiers (Mobile)",
+    searchHeader: "🔍 Recherche de Documents & Véhicules",
+    lblMake: "Marque",
+    lblModel: "Modèle",
+    lblYear: "Année",
+    lblFuel: "Carburant",
+    lblSystem: "Système / Module",
+    lblCategory: "Catégorie",
+    lblKeyword: "Recherche intelligente (Moteur, ECU, DTC, Titre)",
+    btnSearch: "🔍 RECHERCHER",
+    btnShowAll: "📂 TOUT AFFICHER",
+    resultsHeader: "📄 Enregistrements Techniques",
+    resultsPlaceholder: "Sélectionnez des filtres ou cliquez sur Tout afficher.",
+    adminHeader: "🔒 Administration & Saisie",
+    adminDesc: "Ajouter des véhicules, spécifications techniques, codes DTC et fichiers.",
+    lblAdminPass: "Mot de passe administrateur",
+    btnLogin: "🔑 CONNEXION",
+    btnResetPass: "🔄 Réinitialiser le mot de passe",
+    addRecHeader: "➕ Ajouter un Document Technique ou Véhicule",
+    addRecDesc: "Sélectionnez ou tapez directement un nouveau nom.",
+    sec1Title: "1️⃣ Identification du Véhicule",
+    sec2Title: "2️⃣ Moteur, ECU & Système Électrique",
+    sec3Title: "3️⃣ Détails, DTC & Fichiers",
+    lblEngineCode: "Code & Cylindrée Moteur",
+    lblEcuNum: "Type / Numéro ECU",
+    lblDocTitle: "Titre du Document",
+    lblDtcCodes: "Codes Défauts DTC associés",
+    lblTechNotes: "Notes techniques, valeurs des capteurs ou astuce de réparation",
+    lblSelectFile: "Sélectionner des fichiers (PDF, Word, Vidéo, Image)",
+    lblCacheCheck: "Mettre en cache les fichiers < 25 Mo dans le navigateur",
+    btnSaveRecord: "💾 ENREGISTRER",
+    catalogHeader: "🚗 Gestionnaire de Catalogue Véhicules",
+    quickAddHeader: "＋ Ajout rapide de véhicule",
+    delVehicleHeader: "🗑️ Supprimer un Véhicule",
+    lblSelectDel: "Sélectionner l'élément à supprimer",
+    btnDelVehicle: "🗑️ Supprimer la sélection",
+    syncHeader: "💾 Synchronisation (database.json)",
+    btnSaveJson: "⚡ SAUVEGARDER database.json",
+    btnExportFull: "📦 EXPORTATION COMPLÈTE",
+    btnLoadJson: "📥 CHARGER database.json",
+    manageHeader: "Gérer les Enregistrements",
+    btnClearAll: "⚠️ Tout Effacer",
+    passHeader: "🔐 Modifier le Mot de Passe",
+    btnUpdatePass: "💾 METTRE À JOUR",
+    btnLogout: "🚪 DÉCONNEXION",
+    btnOpenExt: "↗️ Ouvrir externe",
+    btnDownload: "⬇️ Télécharger",
+    btnClose: "✖ Fermer",
+    optAllMakes: "Toutes les marques",
+    optAllModels: "Tous les modèles",
+    optAllYears: "Toutes les années",
+    optAllFuels: "Tous les carburants",
+    optAllSystems: "Tous les systèmes",
+    optAllCategories: "Toutes les catégories",
+    phNewMake: "Ou taper nouvelle marque",
+    phNewModel: "Ou taper nouveau modèle",
+    phNewYear: "Ou taper année",
+    phDocTitle: "Ex: Schéma d'injection et brochage",
+    phTechNotes: "Ex: Résistance capteur vilebrequin = 240 Ohms...",
+    phMake: "Marque",
+    phModel: "Modèle",
+    phYear: "Année",
+    phFilter: "Filtrer la liste...",
+    phOldPass: "Mot de passe actuel",
+    phNewPass: "Nouveau mot de passe",
+    btnAddVehicle: "＋ Ajouter le véhicule"
+  },
+  en: {
+    langLabel: "Language:",
+    appTitle: "⚡ Fateh-B Diag-Tech Pro",
+    appSubtitle: "Automotive Electrical, ECU, Wiring & Diagnostic System",
+    folderTitle: "Local Media Folder (files/)",
+    folderDesc: "Windows: Reads 'files/' automatically. Mobile: Tap 'Link Folder' or 'Select Files' once for offline playback.",
+    btnLinkFolder: "📂 Link Folder",
+    btnSelectFiles: "📱 Select Files",
+    searchHeader: "🔍 Vehicle & Technical Documentation Search",
+    lblMake: "Make / Marque",
+    lblModel: "Model / Modèle",
+    lblYear: "Year / Année",
+    lblFuel: "Fuel / Carburant",
+    lblSystem: "System / Module",
+    lblCategory: "Document Category",
+    lblKeyword: "Smart Search (Engine, ECU, DTC, Title)",
+    btnSearch: "🔍 SEARCH DATABASE",
+    btnShowAll: "📂 RESET & SHOW ALL",
+    resultsHeader: "📄 Matching Technical Records",
+    resultsPlaceholder: "Select search filters or click 'Show All'.",
+    adminHeader: "🔒 Workshop Administration & Data Entry",
+    adminDesc: "Add vehicles, technical specs, DTC codes, and manage database.",
+    lblAdminPass: "Administrator Password",
+    btnLogin: "🔑 ADMIN LOGIN",
+    btnResetPass: "🔄 Reset Default Password",
+    addRecHeader: "➕ Add New Technical Document / Vehicle Record",
+    addRecDesc: "Select an existing item or type a new one directly.",
+    sec1Title: "1️⃣ Vehicle Identification",
+    sec2Title: "2️⃣ Engine, ECU & Electrical System",
+    sec3Title: "3️⃣ Details, DTC & Files",
+    lblEngineCode: "Engine Code & Size",
+    lblEcuNum: "ECU Brand / Number",
+    lblDocTitle: "Document Title",
+    lblDtcCodes: "Related DTC Fault Codes",
+    lblTechNotes: "Technical Notes / Sensor Values / Repair Tip",
+    lblSelectFile: "Select Files (PDF / Word / Image / Video)",
+    lblCacheCheck: "Cache files under 25 MB inside browser storage",
+    btnSaveRecord: "💾 SAVE RECORD",
+    catalogHeader: "🚗 Standalone Vehicle Catalog Manager",
+    quickAddHeader: "＋ Quick Add Vehicle Tree",
+    delVehicleHeader: "🗑️ Delete Vehicle Entry",
+    lblSelectDel: "Select Make / Model / Year to remove",
+    btnDelVehicle: "🗑️ Delete Selected",
+    syncHeader: "💾 Database Sync (database.json)",
+    btnSaveJson: "⚡ SAVE database.json",
+    btnExportFull: "📦 EXPORT FULL BACKUP",
+    btnLoadJson: "📥 LOAD database.json",
+    manageHeader: "Manage Existing Records",
+    btnClearAll: "⚠️ Clear All",
+    passHeader: "🔐 Change Administrator Password",
+    btnUpdatePass: "💾 UPDATE PASSWORD",
+    btnLogout: "🚪 LOGOUT ADMIN",
+    btnOpenExt: "↗️ Open Externally",
+    btnDownload: "⬇️ Download",
+    btnClose: "✖ Close",
+    optAllMakes: "All Makes",
+    optAllModels: "All Models",
+    optAllYears: "All Years",
+    optAllFuels: "All Fuels",
+    optAllSystems: "All Systems",
+    optAllCategories: "All Categories",
+    phNewMake: "Or type new Make",
+    phNewModel: "Or type new Model",
+    phNewYear: "Or type Year",
+    phDocTitle: "Optional title",
+    phTechNotes: "Example: Resistance = 240 Ohm...",
+    phMake: "Make",
+    phModel: "Model",
+    phYear: "Year",
+    phFilter: "Filter management list...",
+    phOldPass: "Current Password",
+    phNewPass: "New Password",
+    btnAddVehicle: "＋ Add Vehicle"
+  }
+};
+
+let currentLang = localStorage.getItem("fateh_lang") || "ar";
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem("fateh_lang", lang);
+  
+  const root = document.getElementById("htmlRoot");
+  root.setAttribute("lang", lang);
+  root.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+
+  // تحديث أزرار اللغة النشطة
+  ["ar", "fr", "en"].forEach(l => {
+    const btn = document.getElementById(`btn-${l}`);
+    if (btn) {
+      if (l === lang) btn.classList.add("active");
+      else btn.classList.remove("active");
+    }
+  });
+
+  // تحديث كل العناصر التي تحمل وسم data-i18n
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (i18n[lang][key]) {
+      el.textContent = i18n[lang][key];
+    }
+  });
+
+  // تحديث الـ Placeholders
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+    const key = el.getAttribute("data-i18n-ph");
+    if (i18n[lang][key]) {
+      el.setAttribute("placeholder", i18n[lang][key]);
+    }
+  });
+
+  // إعادة تحميل النتائج وقوائم السيارات لتحديث النصوص الافتراضية
+  loadVehicleOptions();
+  searchDocuments();
+}
+
+const DB_NAME = "FatehDiagTech";
+const DB_VERSION = 2;
+const DEFAULT_PASS = "Amineb2014";
+const MAX_BLOB_SIZE = 25 * 1024 * 1024;
+
+let db = null;
+let isAdmin = false;
+let currentObjectUrl = null;
+const linkedFilesMap = new Map();
+
+function getStoredPassword() {
+  try {
+    const p = localStorage.getItem("fateh_password");
+    if (!p) {
+      localStorage.setItem("fateh_password", DEFAULT_PASS);
+      return DEFAULT_PASS;
+    }
+    return p.trim();
+  } catch (e) {
+    return DEFAULT_PASS;
+  }
+}
+
+function setStoredPassword(newPass) {
+  try {
+    localStorage.setItem("fateh_password", newPass.trim());
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+request.onupgradeneeded = function(e) {
+  const database = e.target.result;
+  if (!database.objectStoreNames.contains("documents")) {
+    database.createObjectStore("documents", { keyPath: "id", autoIncrement: true });
+  }
+  if (!database.objectStoreNames.contains("vehicles")) {
+    database.createObjectStore("vehicles", { keyPath: "id", autoIncrement: true });
+  }
+};
+
+request.onsuccess = async function(e) {
+  db = e.target.result;
+  setLanguage(currentLang);
+  await tryAutoLoadDatabaseJson();
+  await loadVehicleOptions();
+  await showAll();
+};
+
+async function tryAutoLoadDatabaseJson() {
+  try {
+    const existingDocs = await getAll("documents");
+    if (existingDocs.length > 0) return;
+    const res = await fetch("./database.json");
+    if (res.ok) {
+      const data = await res.json();
+      await mergeDatabaseObject(data);
+    }
+  } catch (err) {}
+}
+
+function handleFolderLink(event) {
+  const files = Array.from(event.target.files || []);
+  if (!files.length) return;
+
+  linkedFilesMap.clear();
+  files.forEach(file => {
+    linkedFilesMap.set(file.name.toLowerCase(), file);
+    if (file.name.toLowerCase() === "database.json") {
+      file.text().then(txt => mergeDatabaseObject(JSON.parse(txt))).catch(() => {});
+    }
+  });
+
+  document.getElementById("folderDot").classList.add("active");
+  document.getElementById("folderStatus").textContent = `✅ Linked ${files.length} file(s).`;
+}
+
+function getAll(store) {
+  return new Promise((resolve, reject) => {
+    const req = db.transaction(store, "readonly").objectStore(store).getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function saveRecord(store, data) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, "readwrite");
+    tx.objectStore(store).add(data);
+    tx.oncomplete = () => resolve(true);
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function fill(id, values, placeholderKey, keepSelection = true) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const prev = keepSelection ? el.value : "";
+  el.innerHTML = "";
+  const first = document.createElement("option");
+  first.value = "";
+  first.textContent = i18n[currentLang][placeholderKey] || placeholderKey;
+  el.appendChild(first);
+
+  values.forEach(v => {
+    const op = document.createElement("option");
+    op.value = v;
+    op.textContent = v;
+    el.appendChild(op);
+  });
+
+  if (keepSelection && values.includes(prev)) el.value = prev;
+}
+
+function unique(values) {
+  return [...new Set(values.filter(Boolean))].sort();
+}
+
+async function ensureVehicleHierarchyExists(make, model, year) {
+  const vehicles = await getAll("vehicles");
+  if (make && !vehicles.some(v => v.level === "make" && v.make.toLowerCase() === make.toLowerCase())) {
+    await saveRecord("vehicles", { level: "make", make });
+  }
+  if (make && model && !vehicles.some(v => v.level === "model" && v.make.toLowerCase() === make.toLowerCase() && v.model.toLowerCase() === model.toLowerCase())) {
+    await saveRecord("vehicles", { level: "model", make, model });
+  }
+  if (make && model && year && !vehicles.some(v => v.level === "year" && v.make.toLowerCase() === make.toLowerCase() && v.model.toLowerCase() === model.toLowerCase() && String(v.year) === String(year))) {
+    await saveRecord("vehicles", { level: "year", make, model, year: String(year) });
+  }
+}
+
+async function quickAddVehicleTree() {
+  if (!isAdmin) return;
+  const make = document.getElementById("quickMake").value.trim();
+  const model = document.getElementById("quickModel").value.trim();
+  const year = document.getElementById("quickYear").value.trim();
+  if (!make) return alert("Please enter at least a Make.");
+  await ensureVehicleHierarchyExists(make, model, year);
+  document.getElementById("quickMake").value = "";
+  document.getElementById("quickModel").value = "";
+  document.getElementById("quickYear").value = "";
+  await loadVehicleOptions();
+  alert(`✅ Added: ${[make, model, year].filter(Boolean).join(" → ")}`);
+}
+
+async function loadVehicleOptions() {
+  if (!db) return;
+  const vehicles = await getAll("vehicles");
+  const docs = await getAll("documents");
+
+  const makes = unique([
+    ...vehicles.filter(v => v.level === "make").map(v => v.make),
+    ...docs.map(d => d.make)
+  ]);
+
+  fill("make", makes, "optAllMakes");
+  if (!document.getElementById("make").value) {
+    fill("model", [], "optAllModels", false);
+    fill("year", [], "optAllYears", false);
+  }
+
+  if (isAdmin) {
+    fill("docMake", makes, "optAllMakes");
+    populateDeleteVehicleList(vehicles);
+  }
+}
+
+function populateDeleteVehicleList(vehicles) {
+  const select = document.getElementById("deleteVehicleSelect");
+  if (!select) return;
+  select.innerHTML = '<option value="">Select Vehicle Entry to Delete...</option>';
+  vehicles.forEach(v => {
+    const op = document.createElement("option");
+    op.value = v.id;
+    if (v.level === "make") op.textContent = `[MAKE] ${v.make}`;
+    else if (v.level === "model") op.textContent = `[MODEL] ${v.make} → ${v.model}`;
+    else if (v.level === "year") op.textContent = `[YEAR] ${v.make} → ${v.model} (${v.year})`;
+    select.appendChild(op);
+  });
+}
+
+async function deleteVehicleEntry() {
+  if (!isAdmin) return;
+  const id = Number(document.getElementById("deleteVehicleSelect").value);
+  if (!id) return alert("Select an item.");
+  if (!confirm("Delete this vehicle entry?")) return;
+  const tx = db.transaction("vehicles", "readwrite");
+  tx.objectStore("vehicles").delete(id);
+  tx.oncomplete = async () => { await loadVehicleOptions(); };
+}
+
+async function updateModels(make, selectId, placeholderKey) {
+  const vehicles = await getAll("vehicles");
+  const docs = await getAll("documents");
+  const models = unique([
+    ...vehicles.filter(v => v.level === "model" && v.make === make).map(v => v.model),
+    ...docs.filter(d => d.make === make).map(d => d.model)
+  ]);
+  fill(selectId, models, placeholderKey, false);
+}
+
+async function updateYears(make, model, selectId, placeholderKey) {
+  const vehicles = await getAll("vehicles");
+  const docs = await getAll("documents");
+  const years = unique([
+    ...vehicles.filter(v => v.level === "year" && v.make === make && v.model === model).map(v => v.year),
+    ...docs.filter(d => d.make === make && d.model === model).map(d => d.year)
+  ]);
+  fill(selectId, years, placeholderKey, false);
+}
+
+document.getElementById("make").onchange = async function() {
+  await updateModels(this.value, "model", "optAllModels");
+  fill("year", [], "optAllYears", false);
+  searchDocuments();
+};
+
+document.getElementById("model").onchange = async function() {
+  await updateYears(document.getElementById("make").value, this.value, "year", "optAllYears");
+  searchDocuments();
+};
+
+document.getElementById("year").onchange = searchDocuments;
+
+async function onAdminMakeChange() {
+  const make = document.getElementById("docMake").value;
+  document.getElementById("docMakeCustom").value = "";
+  await updateModels(make, "docModel", "optAllModels");
+  fill("docYear", [], "optAllYears", false);
+}
+
+async function onAdminModelChange() {
+  const make = document.getElementById("docMakeCustom").value.trim() || document.getElementById("docMake").value;
+  const model = document.getElementById("docModel").value;
+  document.getElementById("docModelCustom").value = "";
+  await updateYears(make, model, "docYear", "optAllYears");
+}
+
+function togglePass(id) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+function login() {
+  const input = document.getElementById("loginPassword").value.trim();
+  const saved = getStoredPassword();
+  if (
+    input === saved ||
+    input.toLowerCase() === saved.toLowerCase() ||
+    input.toLowerCase() === DEFAULT_PASS.toLowerCase()
+  ) {
+    isAdmin = true;
+    document.getElementById("loginPassword").value = "";
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("adminPanel").classList.remove("hidden");
+    loadVehicleOptions();
+    loadManage();
+  } else {
+    alert("Incorrect Password! Default is: Amineb2014");
+  }
+}
+
+function resetDefaultPassword() {
+  if (confirm("Reset password to default (Amineb2014)?")) {
+    setStoredPassword(DEFAULT_PASS);
+    document.getElementById("loginPassword").value = DEFAULT_PASS;
+  }
+}
+
+function logout() {
+  isAdmin = false;
+  document.getElementById("adminPanel").classList.add("hidden");
+  document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function detectFileLabel(fileName = "", fileType = "") {
+  if (!fileName) return "TECH NOTE";
+  const lower = fileName.toLowerCase();
+  if (lower.endsWith(".pdf") || fileType === "application/pdf") return "PDF";
+  if (/\.(mp4|mkv|webm|avi|mov)$/i.test(lower) || fileType.startsWith("video/")) return "VIDEO";
+  if (/\.(doc|docx|rtf)$/i.test(lower) || fileType.includes("word")) return "WORD";
+  if (/\.(png|jpg|jpeg|webp|gif|bmp)$/i.test(lower) || fileType.startsWith("image/")) return "IMAGE";
+  return "FILE";
+}
+
+function guessMimeType(fileName = "", fallback = "application/octet-stream") {
+  const lower = fileName.toLowerCase();
+  if (lower.endsWith(".pdf")) return "application/pdf";
+  if (lower.endsWith(".mp4")) return "video/mp4";
+  if (lower.endsWith(".webm")) return "video/webm";
+  if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+  if (lower.endsWith(".png")) return "image/png";
+  if (lower.endsWith(".docx")) return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  if (lower.endsWith(".doc")) return "application/msword";
+  return fallback || "application/octet-stream";
+}
+
+async function addDocumentsBatch() {
+  if (!isAdmin) return;
+  const make = document.getElementById("docMakeCustom").value.trim() || document.getElementById("docMake").value;
+  const model = document.getElementById("docModelCustom").value.trim() || document.getElementById("docModel").value;
+  const year = document.getElementById("docYearCustom").value.trim() || document.getElementById("docYear").value;
+  const fuel = document.getElementById("docFuel").value;
+  const engine = document.getElementById("engine").value.trim();
+  const ecuType = document.getElementById("ecuType").value.trim();
+  const system = document.getElementById("docSystem").value;
+  const category = document.getElementById("newCategory").value;
+  const customTitle = document.getElementById("title").value.trim();
+  const dtcCodes = document.getElementById("dtcCodes").value.trim();
+  const techNotes = document.getElementById("techNotes").value.trim();
+  const files = Array.from(document.getElementById("file").files || []);
+  const shouldStoreBlob = document.getElementById("storeBlobCheck").checked;
+
+  if (!make || !model || !year) return alert("Select or type Make, Model, and Year.");
+  if (!files.length && !techNotes && !customTitle) return alert("Select a file or enter notes.");
+
+  await ensureVehicleHierarchyExists(make, model, year);
+
+  if (files.length > 0) {
+    for (const f of files) {
+      const cleanName = f.name.replace(/\.[^/.]+$/, "");
+      const finalTitle = customTitle && files.length === 1 ? customTitle : customTitle ? `${customTitle} (${cleanName})` : cleanName;
+      const keepBlob = shouldStoreBlob && f.size <= MAX_BLOB_SIZE ? f : null;
+      linkedFilesMap.set(f.name.toLowerCase(), f);
+
+      await saveRecord("documents", {
+        make, model, year, fuel, engine, ecuType, system, category,
+        title: finalTitle, dtcCodes, techNotes,
+        fileName: f.name,
+        relativePath: `files/${encodeURIComponent(f.name)}`,
+        fileType: f.type || guessMimeType(f.name),
+        fileSize: f.size,
+        blob: keepBlob,
+        date: new Date().toISOString()
+      });
+    }
+  } else {
+    await saveRecord("documents", {
+      make, model, year, fuel, engine, ecuType, system, category,
+      title: customTitle || `${system} - ${engine || model}`,
+      dtcCodes, techNotes,
+      fileName: "", relativePath: "", fileType: "text/plain", fileSize: 0, blob: null,
+      date: new Date().toISOString()
+    });
+  }
+
+  document.getElementById("file").value = "";
+  document.getElementById("title").value = "";
+  document.getElementById("dtcCodes").value = "";
+  document.getElementById("techNotes").value = "";
+  document.getElementById("docMakeCustom").value = "";
+  document.getElementById("docModelCustom").value = "";
+  document.getElementById("docYearCustom").value = "";
+
+  alert("✅ Record saved successfully!");
+  await loadManage();
+  await showAll();
+}
+
+async function searchDocuments() {
+  if (!db) return;
+  const make = document.getElementById("make").value;
+  const model = document.getElementById("model").value;
+  const year = document.getElementById("year").value;
+  const fuel = document.getElementById("searchFuel").value;
+  const system = document.getElementById("searchSystem").value;
+  const category = document.getElementById("category").value;
+  const keyword = document.getElementById("keyword").value.trim().toLowerCase();
+
+  const docs = await getAll("documents");
+  document.getElementById("totalDocsBtn").textContent = docs.length;
+
+  const found = docs.filter(d => {
+    const text = [d.make, d.model, d.year, d.fuel, d.engine, d.ecuType, d.system, d.category, d.title, d.dtcCodes, d.techNotes, d.fileName].filter(Boolean).join(" ").toLowerCase();
+    return (
+      (!make || d.make === make) &&
+      (!model || d.model === model) &&
+      (!year || String(d.year) === String(year)) &&
+      (!fuel || d.fuel === fuel) &&
+      (!system || d.system === system) &&
+      (!category || d.category === category) &&
+      (!keyword || text.includes(keyword))
+    );
+  });
+  displayDocuments(found);
+}
+
+async function showAll() {
+  if (!db) return;
+  document.getElementById("make").value = "";
+  fill("model", [], "optAllModels", false);
+  fill("year", [], "optAllYears", false);
+  document.getElementById("searchFuel").value = "";
+  document.getElementById("searchSystem").value = "";
+  document.getElementById("category").value = "";
+  document.getElementById("keyword").value = "";
+  const allDocs = await getAll("documents");
+  document.getElementById("totalDocsBtn").textContent = allDocs.length;
+  displayDocuments(allDocs);
+}
+
+function displayDocuments(docs) {
+  const area = document.getElementById("results");
+  document.getElementById("docCount").textContent = docs.length;
+  area.innerHTML = "";
+
+  if (!docs.length) {
+    area.textContent = currentLang === "ar" ? "لا توجد سجلات مطابقة." : currentLang === "fr" ? "Aucun enregistrement trouvé." : "No matching records found.";
+    return;
+  }
+
+  docs.forEach(d => {
+    const div = document.createElement("div");
+    div.className = "document";
+    const info = document.createElement("div");
+    info.className = "document-info";
+
+    const title = document.createElement("strong");
+    title.textContent = d.title;
+
+    const badges = document.createElement("div");
+    const typeBadge = document.createElement("span");
+    typeBadge.className = "badge badge-type";
+    typeBadge.textContent = detectFileLabel(d.fileName, d.fileType);
+    badges.appendChild(typeBadge);
+
+    [`${d.make} ${d.model}`, `📅 ${d.year}`, d.fuel ? `⛽ ${d.fuel}` : null, d.engine ? `⚙️ ${d.engine}` : null, d.system ? `🔌 ${d.system}` : null, d.category].filter(Boolean).forEach(txt => {
+      const b = document.createElement("span");
+      b.className = "badge";
+      b.textContent = txt;
+      badges.appendChild(b);
+    });
+
+    if (d.ecuType) {
+      const ecuB = document.createElement("span");
+      ecuB.className = "badge badge-ecu";
+      ecuB.textContent = `📟 ECU: ${d.ecuType}`;
+      badges.appendChild(ecuB);
+    }
+    if (d.dtcCodes) {
+      const dtcB = document.createElement("span");
+      dtcB.className = "badge badge-dtc";
+      dtcB.textContent = `⚠️ DTC: ${d.dtcCodes}`;
+      badges.appendChild(dtcB);
+    }
+
+    info.append(title, badges);
+
+    if (d.techNotes) {
+      const notesBox = document.createElement("div");
+      notesBox.className = "tech-notes";
+      notesBox.textContent = `🔧 Notes: ${d.techNotes}`;
+      info.appendChild(notesBox);
+    }
+    if (d.fileName) {
+      const fileNote = document.createElement("p");
+      fileNote.className = "small";
+      fileNote.textContent = `📎 File: ${d.fileName}`;
+      info.appendChild(fileNote);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+    if (d.fileName) {
+      const viewBtn = document.createElement("button");
+      viewBtn.textContent = currentLang === "ar" ? "👁️ فتح / تشغيل" : "👁️ OPEN";
+      viewBtn.onclick = () => openDocument(d.id, false);
+
+      const dlBtn = document.createElement("button");
+      dlBtn.className = "admin";
+      dlBtn.textContent = currentLang === "ar" ? "⬇️ تحميل" : "⬇️ DOWNLOAD";
+      dlBtn.onclick = () => openDocument(d.id, true);
+      actions.append(viewBtn, dlBtn);
+    }
+
+    div.append(info, actions);
+    area.appendChild(div);
+  });
+}
+
+function resolveDocumentSource(d) {
+  if (currentObjectUrl) {
+    URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = null;
+  }
+  const key = (d.fileName || "").toLowerCase();
+  if (key && linkedFilesMap.has(key)) {
+    const fileObj = linkedFilesMap.get(key);
+    currentObjectUrl = URL.createObjectURL(fileObj);
+    return { url: currentObjectUrl, mime: fileObj.type || guessMimeType(d.fileName, d.fileType) };
+  }
+  if (d.blob instanceof Blob) {
+    currentObjectUrl = URL.createObjectURL(d.blob);
+    return { url: currentObjectUrl, mime: d.blob.type || guessMimeType(d.fileName, d.fileType) };
+  }
+  return { url: d.relativePath || `files/${encodeURIComponent(d.fileName || "")}`, mime: guessMimeType(d.fileName, d.fileType) };
+}
+
+function openDocument(id, forceDownload = false) {
+  const req = db.transaction("documents", "readonly").objectStore("documents").get(id);
+  req.onsuccess = function() {
+    const d = req.result;
+    if (!d || !d.fileName) return;
+
+    const { url, mime } = resolveDocumentSource(d);
+    const type = (mime || "").toLowerCase();
+    const isWord = /\.(doc|docx|rtf)$/i.test(d.fileName || "") || type.includes("word");
+
+    if (forceDownload || isWord) {
+      triggerDownload(url, d.fileName);
+      return;
+    }
+
+    const body = document.getElementById("viewerBody");
+    body.innerHTML = "";
+    document.getElementById("viewerTitle").textContent = `${d.title} (${d.make} ${d.model})`;
+    document.getElementById("viewerDownload").onclick = () => triggerDownload(url, d.fileName);
+    document.getElementById("viewerNewTab").onclick = () => window.open(url, "_blank");
+
+    if (type.startsWith("image/")) {
+      const img = document.createElement("img");
+      img.src = url;
+      body.appendChild(img);
+      document.getElementById("viewerModal").classList.remove("hidden");
+    } else if (type.startsWith("video/") || type.startsWith("audio/")) {
+      const video = document.createElement("video");
+      video.src = url; video.controls = true; video.autoplay = true;
+      body.appendChild(video);
+      document.getElementById("viewerModal").classList.remove("hidden");
+    } else if (type === "application/pdf") {
+      const iframe = document.createElement("iframe");
+      iframe.src = url;
+      body.appendChild(iframe);
+      document.getElementById("viewerModal").classList.remove("hidden");
+    } else {
+      triggerDownload(url, d.fileName);
+    }
+  };
+}
+
+function triggerDownload(url, fileName) {
+  const a = document.createElement("a");
+  a.href = url; a.download = fileName || "doc";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+function closeViewer() {
+  document.getElementById("viewerModal").classList.add("hidden");
+  document.getElementById("viewerBody").innerHTML = "";
+}
+
+async function loadManage() {
+  if (!isAdmin) return;
+  const docs = await getAll("documents");
+  const filter = (document.getElementById("manageFilter")?.value || "").trim().toLowerCase();
+  const area = document.getElementById("manage");
+  area.innerHTML = "";
+
+  const filtered = docs.filter(d => !filter || `${d.make} ${d.model} ${d.year} ${d.title} ${d.fileName}`.toLowerCase().includes(filter));
+  document.getElementById("manageCount").textContent = filtered.length;
+
+  filtered.forEach(d => {
+    const div = document.createElement("div");
+    div.className = "document";
+    const info = document.createElement("div");
+    info.className = "document-info";
+    info.textContent = `${d.make} ${d.model} (${d.year}) | ${d.title}`;
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+    if (d.fileName) {
+      const open = document.createElement("button");
+      open.className = "admin icon-btn"; open.textContent = "👁️";
+      open.onclick = () => openDocument(d.id, false);
+      actions.appendChild(open);
+    }
+    const del = document.createElement("button");
+    del.className = "danger icon-btn"; del.textContent = "🗑️";
+    del.onclick = () => deleteDocument(d.id);
+    actions.appendChild(del);
+
+    div.append(info, actions);
+    area.appendChild(div);
+  });
+}
+
+async function deleteDocument(id) {
+  if (!isAdmin) return;
+  if (!confirm("Delete?")) return;
+  const tx = db.transaction("documents", "readwrite");
+  tx.objectStore("documents").delete(id);
+  tx.oncomplete = async () => { await loadManage(); await showAll(); };
+}
+
+async function clearAllDocuments() {
+  if (!isAdmin) return;
+  if (!confirm("Clear all?")) return;
+  const tx = db.transaction("documents", "readwrite");
+  tx.objectStore("documents").clear();
+  tx.oncomplete = async () => { await loadManage(); await showAll(); };
+}
+
+function changePassword() {
+  if (!isAdmin) return;
+  const old = document.getElementById("oldPassword").value.trim();
+  const newPass = document.getElementById("newPassword").value.trim();
+  const saved = getStoredPassword();
+  if (old.toLowerCase() !== saved.toLowerCase() && old.toLowerCase() !== DEFAULT_PASS.toLowerCase()) {
+    return alert("Incorrect current password.");
+  }
+  if (newPass.length < 4) return alert("Min 4 chars.");
+  setStoredPassword(newPass);
+  document.getElementById("oldPassword").value = "";
+  document.getElementById("newPassword").value = "";
+  alert("Password updated.");
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+function base64ToBlob(dataUrl) {
+  const parts = dataUrl.split(",");
+  const mime = parts[0].match(/:(.*?);/)[1];
+  const bstr = atob(parts[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new Blob([u8arr], { type: mime });
+}
+
+async function exportDatabase(includeBlobs = false) {
+  if (!isAdmin) return;
+  const vehicles = await getAll("vehicles");
+  const docs = await getAll("documents");
+  const serializedDocs = [];
+
+  for (const d of docs) {
+    let encodedBlob = null;
+    if (includeBlobs && d.blob instanceof Blob && d.blob.size <= MAX_BLOB_SIZE) {
+      encodedBlob = await blobToBase64(d.blob);
+    }
+    serializedDocs.push({
+      ...d,
+      relativePath: d.fileName ? (d.relativePath || `files/${encodeURIComponent(d.fileName)}`) : "",
+      blob: encodedBlob
+    });
+  }
+
+  const backup = { version: 5, vehicles, documents: serializedDocs };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  triggerDownload(url, "database.json");
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+async function mergeDatabaseObject(data) {
+  if (!Array.isArray(data.vehicles) || !Array.isArray(data.documents)) return 0;
+  const existingVehicles = await getAll("vehicles");
+  for (const v of data.vehicles) {
+    const exists = existingVehicles.some(ev => ev.level === v.level && ev.make === v.make && ev.model === v.model && String(ev.year) === String(v.year));
+    if (!exists) {
+      const copy = { ...v }; delete copy.id;
+      await saveRecord("vehicles", copy);
+    }
+  }
+
+  const existingDocs = await getAll("documents");
+  let added = 0;
+  for (const d of data.documents) {
+    const exists = existingDocs.some(ed => ed.make === d.make && ed.model === d.model && String(ed.year) === String(d.year) && ed.title === d.title && ed.fileName === d.fileName);
+    if (!exists) {
+      const copy = { ...d }; delete copy.id;
+      if (typeof copy.blob === "string" && copy.blob.startsWith("data:")) {
+        copy.blob = base64ToBlob(copy.blob);
+      } else {
+        copy.blob = null;
+      }
+      await saveRecord("documents", copy);
+      added++;
+    }
+  }
+  await loadVehicleOptions();
+  if (isAdmin) await loadManage();
+  await showAll();
+  return added;
+}
+
+async function importDatabase(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const added = await mergeDatabaseObject(JSON.parse(text));
+    event.target.value = "";
+    alert(`✅ Synced! Added ${added} record(s).`);
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+}
+</script>
+</body>
+</html>
