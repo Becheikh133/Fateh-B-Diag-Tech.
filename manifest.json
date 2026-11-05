@@ -1,4 +1,5 @@
 {
+  "id": "/Fateh-B-Diag-Tech./",
   "name": "Fateh-B Diag-Tech Pro",
   "short_name": "Fateh Diag",
   "description": "Application de la gestion des donnees et de la documentation electriques automobiles",
@@ -12,10 +13,22 @@
   "lang": "ar",
   "icons": [
     {
-      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjkwIiBmaWxsPSIjMTAxODI3Ii8+PHJlY3QgeD0iMjQiIHk9IjI0IiB3aWR0aD0iNDY0IiBoZWlnaHQ9IjQ2NCIgcng9IjcwIiBmaWxsPSIjMTcyODNlIiBzdHJva2U9IiM0MmM4ZmYiIHN0cm9rZS13aWR0aD0iMTYiLz48cGF0aCBkPSJNMjgwIDk2TDE0NCAyODBoMTEybC0yNCAxMzYgMTM2LTE4NEgyNTZsMjQtMTM2eiIgZmlsbD0iIzQyYzhmZiIvPjwvc3ZnPg==",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
+      "src": "https://placehold.co/192x192/101827/42c8ff.png?text=FD",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "https://placehold.co/512x512/101827/42c8ff.png?text=Fateh+Diag",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://placehold.co/512x512/101827/42c8ff.png?text=Fateh+Diag",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
