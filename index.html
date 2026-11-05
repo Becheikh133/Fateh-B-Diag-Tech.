@@ -10,37 +10,9 @@
 <meta name="apple-mobile-web-app-title" content="Fateh DiagTech">
 <title>Fateh-B Diag-Tech Pro</title>
 
-<!-- توليد PWA Manifest تلقائياً -->
-<script>
-(function setupPWA() {
-  const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <rect width="512" height="512" rx="90" fill="#101827"/>
-    <rect x="24" y="24" width="464" height="464" rx="70" fill="#17283e" stroke="#42c8ff" stroke-width="16"/>
-    <path d="M280 96L144 280h112l-24 136 136-184H256l24-136z" fill="#42c8ff"/>
-  </svg>`;
-  const iconUrl = "data:image/svg+xml;base64," + btoa(svgIcon);
-
-  const linkIcon = document.createElement("link");
-  linkIcon.rel = "icon";
-  linkIcon.href = iconUrl;
-  document.head.appendChild(linkIcon);
-
-  const manifest = {
-    name: "Fateh-B Diag-Tech Pro",
-    short_name: "Fateh Diag",
-    start_url: "./index.html",
-    display: "standalone",
-    background_color: "#101827",
-    theme_color: "#17283e",
-    icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }]
-  };
-  const manifestBlob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
-  const manifestLink = document.createElement("link");
-  manifestLink.rel = "manifest";
-  manifestLink.href = URL.createObjectURL(manifestBlob);
-  document.head.appendChild(manifestLink);
-})();
-</script>
+<!-- ربط ملف الـ Manifest الثابت مباشرة ليتعرف عليه PWABuilder -->
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjkwIiBmaWxsPSIjMTAxODI3Ii8+PHJlY3QgeD0iMjQiIHk9IjI0IiB3aWR0aD0iNDY0IiBoZWlnaHQ9IjQ2NCIgcng9IjcwIiBmaWxsPSIjMTcyODNlIiBzdHJva2U9IiM0MmM4ZmYiIHN0cm9rZS13aWR0aD0iMTYiLz48cGF0aCBkPSJNMjgwIDk2TDE0NCAyODBoMTEybC0yNCAxMzYgMTM2LTE4NEgyNTZsMjQtMTM2eiIgZmlsbD0iIzQyYzhmZiIvPjwvc3ZnPg==">
 
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -237,7 +209,7 @@
 
   <!-- النتائج -->
   <section class="panel">
-    <h2 data-i18n="resultsHeader">📄 Matching Technical Records</h2>
+    <h2><span data-i18n="resultsHeader">📄 Matching Technical Records</span> (<span id="docCount">0</span>)</h2>
     <div id="results" class="small" data-i18n="resultsPlaceholder">Select search filters or click "Show All".</div>
   </section>
 
@@ -670,7 +642,6 @@ function setLanguage(lang) {
   root.setAttribute("lang", lang);
   root.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
 
-  // تحديث أزرار اللغة النشطة
   ["ar", "fr", "en"].forEach(l => {
     const btn = document.getElementById(`btn-${l}`);
     if (btn) {
@@ -679,7 +650,6 @@ function setLanguage(lang) {
     }
   });
 
-  // تحديث كل العناصر التي تحمل وسم data-i18n
   document.querySelectorAll("[data-i18n]").forEach(el => {
     const key = el.getAttribute("data-i18n");
     if (i18n[lang][key]) {
@@ -687,7 +657,6 @@ function setLanguage(lang) {
     }
   });
 
-  // تحديث الـ Placeholders
   document.querySelectorAll("[data-i18n-ph]").forEach(el => {
     const key = el.getAttribute("data-i18n-ph");
     if (i18n[lang][key]) {
@@ -695,7 +664,6 @@ function setLanguage(lang) {
     }
   });
 
-  // إعادة تحميل النتائج وقوائم السيارات لتحديث النصوص الافتراضية
   loadVehicleOptions();
   searchDocuments();
 }
@@ -1106,7 +1074,8 @@ async function showAll() {
 
 function displayDocuments(docs) {
   const area = document.getElementById("results");
-  document.getElementById("docCount").textContent = docs.length;
+  const countEl = document.getElementById("docCount");
+  if (countEl) countEl.textContent = docs.length;
   area.innerHTML = "";
 
   if (!docs.length) {
