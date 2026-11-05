@@ -1,14 +1,21 @@
 {
-  "background_color": "#ffffff",
-  "dir": "rtl",
-  "display": "standalone",
-  "name": "Fateh DiagTech",
-  "orientation": "any",
-  "scope": "/Fateh-B-Diag-Tech/",
-  "short_name": "Fateh DiagTech",
-  "start_url": "/Fateh-B-Diag-Tech/",
-  "theme_color": "#101827",
-  "id": "https://becheikh133.github.io/Fateh-B-Diag-Tech/",
+  "name": "Fateh-B Diag-Tech Pro",
+  "short_name": "Fateh Diag",
   "description": "Application de la gestion des donnees et de la documentation electriques automobiles",
-  "lang": "en"
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#101827",
+  "theme_color": "#101827",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjkwIiBmaWxsPSIjMTAxODI3Ii8+PHJlY3QgeD0iMjQiIHk9IjI0IiB3aWR0aD0iNDY0IiBoZWlnaHQ9IjQ2NCIgcng9IjcwIiBmaWxsPSIjMTcyODNlIiBzdHJva2U9IiM0MmM4ZmYiIHN0cm9rZS13aWR0aD0iMTYiLz48cGF0aCBkPSJNMjgwIDk2TDE0NCAyODBoMTEybC0yNCAxMzYgMTM2LTE4NEgyNTZsMjQtMTM2eiIgZmlsbD0iIzQyYzhmZiIvPjwvc3ZnPg==",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
